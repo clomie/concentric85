@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name "concentric85")(type "KiCad")(uri "${KIPRJMOD}/concentric85.kicad_sym")(options "")(descr ""))
+)
