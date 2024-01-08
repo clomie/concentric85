@@ -20,7 +20,7 @@ function u(i) =
 // 1. R4のカーブ半径
 // カーブ円の中心を頂点として底辺が1U(19.05), 頂角が2°, 底角が89°の二等辺三角形の斜辺の長さを求める
 // 底辺がa, 斜辺がb, 底角がθとすると、a = 2 * b * cos(θ) → b = a / (2 * cos(θ))
-radiusR4 = u(1) / (2 * cos(89));
+radiusR4 = u(1) / (2 * cos(88));
 //
 // 2. 各行のカーブ半径を求める
 // R1の半径 = radiusR4 + 3U
@@ -58,7 +58,7 @@ module layout(df = function(x) 0, units, transform, key_spin = 0, right_hand = f
         let (
             w = u(units[col]),
             h = u(1),
-            wh = false ? $WIDTH_SWITCH_HOLE : [w, h] * 0.97,
+            wh = false ? $WIDTH_SWITCH_HOLE : [w, h] - [1.05, 1.05],
             start = col == 0 ? offset : offset + sum(slice(units, 0, col - 1)),
             degrees = df(start + units[col] / 2),
             origin = key_next_origin(df, start),
@@ -66,7 +66,7 @@ module layout(df = function(x) 0, units, transform, key_spin = 0, right_hand = f
             xy = apply(transform, xy0),
             key_angle = (right_hand ? -1 : 1) * (degrees + key_spin)
         ) {
-            echo(str("{\"x\":", xy.x, ",\"y\":", xy.y, ", \"deg\":", degrees + key_spin, "},"));
+            echo(str("{\"x\":", xy.x, ",\"y\":", xy.y, ", \"deg\":", key_angle, "},"));
             move(xy)
             rect(wh, center = true, spin = key_angle, rounding = 1);
         }
@@ -119,16 +119,19 @@ module right() {
 
         let (
             origin = key_next_origin(key_degree(4), 8),
-            ten_mat = base_mat * back(u(0.5)) * zrot(-10, cp = origin) * move([origin.x, origin.y, 0])
+            ten_mat = base_mat * back(u(0.75)) * zrot(-15, cp = origin) * move([origin.x, origin.y, 0])
         ) {
-            layout(no_curve, [1, 1, 1, 1],       key_spin = -10, ten_mat * back(u(4)), right_hand = true);
-            layout(no_curve, [1, 1, 1, 1],       key_spin = -10, ten_mat * back(u(3)), right_hand = true);
-            layout(no_curve, [1, 1, 1, 1],       key_spin = -10, ten_mat * back(u(2)), right_hand = true);
-            layout(no_curve, [1, 1, 1, 1],       key_spin = -10, ten_mat * back(u(1)), right_hand = true);
-            layout(no_curve, [1, 2], offset = 1, key_spin = -10, ten_mat * back(u(0)), right_hand = true);
+            layout(no_curve, [1, 1, 1, 1],       key_spin = -15, ten_mat * back(u(4)), right_hand = true);
+            layout(no_curve, [1, 1, 1, 1],       key_spin = -15, ten_mat * back(u(3)), right_hand = true);
+            layout(no_curve, [1, 1, 1, 1],       key_spin = -15, ten_mat * back(u(2)), right_hand = true);
+            layout(no_curve, [1, 1, 1, 1],       key_spin = -15, ten_mat * back(u(1)), right_hand = true);
+            layout(no_curve, [1, 2], offset = 1, key_spin = -15, ten_mat * back(u(0)), right_hand = true);
         }
     }
 }
 
 left();
 right();
+
+color("pink") move([-39, 78]) rect([21, 21], center = true);
+color("pink") move([0, 95]) rect([1000, 1], center = true);
